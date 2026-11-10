@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5秒でわかる Git & GitHub 用語集</title>
+    <style>
+        :root {
+            /* Default Dark Mode (GitHub Dark) */
+            --primary-color: #0d1117;       /* 漆黒の背景ベース */
+            --accent-color: #2f81f7;        /* 鮮やかな青（リンク・メインカラー） */
+            --danger-color: #f85149;        /* エラー・削除の赤 */
+            --edit-color: #f0f6fc;          /* 管理系の明るい色 */
+            --fav-color: #f59e0b;           /* お気に入りのゴールド（星） */
+            --read-color: #238636;          /* 習得済み：マージ成功の緑 */
+            --bg-color: #0d1117;            /* メイン背景 */
+            --card-bg: #161b22;             /* カード背景：深いグレー */
+            --text-main: #e6edf3;           /* メインテキスト：オフホワイト */
+            --text-muted: #7d8590;          /* サブテキスト：薄いグレー */
+            --border-color: #30363d;        /* 枠線：ダーク用境界線 */
+            --header-bg: #161b22;           /* ヘッダー背景 */
+            --input-bg: #0d1117;            /* 入力欄背景 */
+            --tab-bg: #21262d;              /* タブの背景色 */
+            --content-bg: #0d1117;          /* アコーディオンの中身の背景 */
+            --daily-pick-bg: rgba(47, 129, 247, 0.1); /* 本日の厳選：薄い青背景 */
+            --progress-bg: #30363d;         /* 進捗バーの背景 */
+        }
+        body.light-mode {
+            /* Light Mode (GitHub Light) */
+            --bg-color: #f6f8fa;            /* メイン背景：GitHubの薄いグレー */
+            --card-bg: #ffffff;             /* カード背景：白 */
+            --text-main: #1f2328;           /* メインテキスト：濃いグレー */
+            --text-muted: #65717c;          /* サブテキスト */
+            --border-color: #d0d7de;        /* 枠線：GitHub標準の境界線 */
+            --header-bg: #161b22;           /* ヘッダー背景 */
+            --input-bg: #ffffff;            /* 入力欄背景 */
+            --tab-bg: #eaeef2;              /* タブの背景色 */
+            --content-bg: #f6f8fa;          /* アコーディオンの中身の背景 */
+            --daily-pick-bg: rgba(9, 105, 218, 0.05); /* 本日の厳選：薄い青背景 */
+            --progress-bg: #d0d7de;         /* 進捗バーの背景 */
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; padding-bottom: 2rem; transition: background-color 0.3s, color 0.3s; }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
+        header { background-color: var(--header-bg); color: white; padding: 2.5rem 0; text-align: center; margin-bottom: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: relative; }
+        header h1 { font-size: 1.75rem; margin-bottom: 0.5rem; }
+        header p { font-size: 0.95rem; opacity: 0.9; }
+        .theme-toggle { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 0.5rem; border-radius: 50%; cursor: pointer; font-size: 1.2rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+        
+        /* Progress Dashboard */
+        .progress-dashboard { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem; }
+        .progress-title { font-size: 0.95rem; font-weight: bold; }
+        .progress-bar-container { width: 100%; height: 10px; background: var(--progress-bg); border-radius: 5px; overflow: hidden; margin-bottom: 0.75rem; }
+        .progress-bar-fill { height: 100%; background: var(--read-color); width: 0%; transition: width 0.5s ease-out; }
+        .progress-message { font-size: 0.85rem; color: var(--accent-color); font-weight: bold; margin-bottom: 0.5rem; min-height: 1.2rem; }
+        body.light-mode .progress-message { color: #0f172a; }
+        .share-progress-btn { background: #000; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: bold; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; }
+        .share-progress-btn:hover { opacity: 0.8; }
+
+        /* Daily Pick Section */
+        .daily-pick-section { margin-bottom: 1.5rem; padding: 1.25rem; background: var(--daily-pick-bg); border: 1px solid var(--accent-color); border-radius: 12px; }
+        .daily-pick-header { font-size: 0.85rem; font-weight: bold; color: var(--accent-color); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+        .daily-pick-card { display: flex; flex-direction: column; gap: 0.5rem; }
+        .daily-pick-title { font-size: 1.1rem; font-weight: bold; }
+        .daily-pick-summary { font-size: 0.9rem; color: var(--text-main); }
+        .share-x-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: #000; color: white; border: none; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; cursor: pointer; margin-top: 0.5rem; text-decoration: none; align-self: flex-start; }
+        .share-x-btn:hover { opacity: 0.8; }
+
+        .search-area { margin-bottom: 1.5rem; }
+        .search-bar { width: 100%; padding: 0.8rem 1rem; border: 2px solid var(--border-color); border-radius: 8px; font-size: 1rem; margin-bottom: 1rem; outline: none; background-color: var(--input-bg); color: var(--text-main); }
+        .tabs { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        .tab-btn { padding: 0.4rem 1rem; border: 1px solid var(--border-color); background-color: var(--tab-bg); color: var(--text-main); border-radius: 20px; font-size: 0.85rem; cursor: pointer; white-space: nowrap; }
+        .tab-btn.active { background-color: var(--accent-color); color: white; border-color: var(--accent-color); }
+        
+        /* Favorites Area */
+        .favorites-section { margin-bottom: 2rem; padding: 1rem; background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 12px; }
+        .favorites-section h2 { font-size: 1rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--fav-color); }
+        .fav-empty-msg { font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 1rem; }
+
+        /* Request Area */
+        .request-area { background: var(--card-bg); border: 1px dashed var(--border-color); border-radius: 10px; padding: 1rem; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .request-area p { font-size: 0.85rem; font-weight: bold; }
+        .request-input-group { display: flex; gap: 0.5rem; }
+        .request-input { flex: 1; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; background: var(--input-bg); color: var(--text-main); font-size: 0.9rem; }
+        .request-btn { background: var(--accent-color); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: bold; }
+
+        .glossary-list { display: grid; gap: 1rem; }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: opacity 0.3s; }
+        .card.read { border-color: var(--read-color); }
+        .card-header { padding: 1.25rem; cursor: pointer; display: flex; justify-content: space-between; align-items: flex-start; }
+        .card-title-box { flex: 1; }
+        .card-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem; }
+        .card-title-row h3 { font-size: 1.2rem; color: var(--accent-color); display: flex; align-items: center; gap: 0.5rem; }
+        body.light-mode .card-title-row h3 { color: #0f172a; }
+        .card-actions { display: flex; gap: 0.8rem; align-items: center; }
+        .fav-btn, .read-btn { background: none; border: none; cursor: pointer; font-size: 1.3rem; color: var(--text-muted); padding: 0.2rem; line-height: 1; transition: transform 0.2s; }
+        .fav-btn.active { color: var(--fav-color); }
+        .read-btn.active { color: var(--read-color); }
+        .fav-btn:hover, .read-btn:hover { transform: scale(1.2); }
+        
+        .card-summary { font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem; }
+        .category-tag { display: inline-block; font-size: 0.7rem; padding: 0.2rem 0.5rem; background-color: rgba(59, 130, 246, 0.1); border-radius: 4px; color: var(--accent-color); }
+        .arrow { font-size: 0.8rem; color: var(--text-muted); transition: transform 0.3s; margin-left: 1rem; margin-top: 0.3rem; }
+        .card.open .arrow { transform: rotate(180deg); }
+        .card-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background-color: var(--content-bg); }
+        .card.open .card-content { max-height: 2000px; border-top: 1px solid var(--border-color); }
+        .content-inner { padding: 1.25rem; font-size: 0.9rem; }
+        .content-section { margin-bottom: 1rem; }
+        .label { display: block; font-weight: bold; margin-bottom: 0.25rem; color: var(--accent-color); }
+        body.light-mode .label { color: #0f172a; }
+        .media-box { margin-top: 1rem; border-radius: 8px; overflow: hidden; background: #000; display: flex; justify-content: center; }
+        .media-box img { max-width: 100%; height: auto; display: block; }
+        .video-container { width: 100%; position: relative; padding-bottom: 56.25%; height: 0; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .link-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent-color); color: white; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 0.5rem; font-size: 0.85rem; }
+        .copy-btn { background: none; border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 0.3rem; margin-top: 0.5rem; }
+        
+        /* Admin */
+        .admin-only { display: none !important; }
+        body.is-admin .admin-only { display: block !important; }
+        .admin-controls { position: absolute; top: 0.5rem; right: 0.5rem; display: flex; gap: 0.3rem; z-index: 10; }
+        .btn-mini { border: none; padding: 0.3rem 0.6rem; border-radius: 4px; cursor: pointer; font-size: 0.7rem; color: white; }
+        .btn-delete { background-color: var(--danger-color); }
+        .btn-edit { background-color: var(--edit-color); }
+        #adminPanel { background: var(--card-bg); border: 2px solid var(--accent-color); border-radius: 10px; padding: 1.5rem; margin-top: 2rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 0.3rem; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9rem; background: var(--input-bg); color: var(--text-main); }
+        .btn-submit { background: var(--accent-color); color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 4px; cursor: pointer; font-size: 0.9rem; font-weight: bold; width: 100%; }
+        
+        .admin-section { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); }
+        .request-list { list-style: none; margin-top: 1rem; }
+        .request-item { display: flex; justify-content: space-between; align-items: center; background: var(--content-bg); padding: 0.5rem 0.8rem; border-radius: 4px; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        
+        /* Backup Section */
+        .backup-controls { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+        .btn-backup { flex: 1; min-width: 150px; background: #64748b; color: white; border: none; padding: 0.6rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
+        .btn-backup:hover { opacity: 0.9; }
+
+        #loginArea { text-align: center; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border-color); }
+        .login-link { font-size: 0.7rem; color: var(--text-muted); cursor: pointer; }
+        #passwordBox { margin-top: 1rem; display: none; }
+        #passwordBox input { padding: 0.4rem; border: 1px solid var(--border-color); border-radius: 4px; margin-right: 0.5rem; background: var(--input-bg); color: var(--text-main); }
+        footer { margin-top: 2rem; text-align: center; font-size: 0.75rem; color: var(--text-muted); }
+        .empty-msg { text-align: center; padding: 3rem; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
+        <h1>5秒でわかるGit & GitHub用語集</h1>
+        <p>個人開発に直結するGitの「肝」を最短で理解する</p>
+    </div>
+</header>
+<main class="container">
+    <!-- Progress Dashboard -->
+    <section id="progressDashboard" class="progress-dashboard">
+        <div class="progress-header">
+            <div class="progress-title" id="progressText">現在のGit & GitHub理解度: 0% (全0語中 0語クリア)</div>
+            <button class="share-progress-btn" onclick="shareProgressOnX()">𝕏 成果をシェア</button>
+        </div>
+        <div class="progress-bar-container">
+            <div id="progressBarFill" class="progress-bar-fill"></div>
+        </div>
+        <div id="progressMessage" class="progress-message">まずは1つ、用語をチェックしてみましょう！</div>
+    </section>
+
+    <!-- Today's Picked AI Term Section -->
+    <section id="dailyPickSection" class="daily-pick-section" style="display:none;">
+        <div class="daily-pick-header">✨ 本日の厳選Git用語</div>
+        <div id="dailyPickContent" class="daily-pick-card">
+            <!-- Content will be rendered here -->
+        </div>
+    </section>
+
+    <section class="search-area">
+        <input type="text" id="searchInput" class="search-bar" placeholder="キーワードで検索 (例: コミット, プルリク, コンフリクト)...">
+        <div class="tabs" id="tabs">
+            <button class="tab-btn active" data-category="all">すべて</button>
+            <button class="tab-btn" data-category="basic">基本・概念</button>
+            <button class="tab-btn" data-category="command">コマンド・操作</button>
+            <button class="tab-btn" data-category="setup">セキュリティ・設定</button>
+        </div>
+    </section>
+
+    <!-- My Glossary (Favorites) Section -->
+    <section id="favoritesSection" class="favorites-section">
+        <h2>⭐ マイ用語帳 (お気に入り)</h2>
+        <div id="favoritesList" class="glossary-list">
+            <!-- Favorites will be rendered here -->
+        </div>
+    </section>
+
+    <!-- Reader Request Area -->
+    <section class="request-area">
+        <p>解説してほしい用語はありますか？</p>
+        <div class="request-input-group">
+            <input type="text" id="readerRequestInput" class="request-input" placeholder="例：プルリクエスト">
+            <button class="request-btn" onclick="submitRequest()">リクエストを送る</button>
+        </div>
+    </section>
+
+    <section class="glossary-list" id="glossaryList"></section>
+
+    <!-- Admin Panel -->
+    <section id="adminPanel" class="admin-only">
+        <h2 style="margin-bottom:1rem; font-size:1.2rem;">用語マネージャー (管理者)</h2>
+        <form id="termForm">
+            <input type="hidden" id="editId">
+            <div class="form-group"><label>用語名</label><input type="text" id="termName" required></div>
+            <div class="form-group"><label>一言要約</label><input type="text" id="termSummary" required></div>
+            <div class="form-group"><label>カテゴリー</label><select id="termCategory"><option value="basic">基本・概念</option><option value="command">コマンド・操作</option><option value="setup">セキュリティ・設定</option></select></div>
+            <div class="form-group"><label>個人開発での活用法</label><textarea id="termUsage" rows="3" required></textarea></div>
+            <div class="form-group"><label>初心者の落とし穴・エラー対策</label><textarea id="termCaution" rows="3" required></textarea></div>
+            <div class="form-group"><label>参考リンクURL (任意)</label><input type="url" id="termLink" placeholder="https://example.com"></div>
+            <div class="form-group"><label>画像URL (任意)</label><input type="url" id="termImageUrl" placeholder="https://example.com/image.png"></div>
+            <div class="form-group"><label>YouTube埋め込みコード (任意)</label><textarea id="termYoutube" rows="2" placeholder='<iframe ...></iframe>'></textarea></div>
+            <button type="submit" id="submitBtn" class="btn-submit">追加する</button>
+            <button type="button" id="cancelEdit" class="btn-submit" style="background:#64748b; margin-top:0.5rem; display:none;">キャンセル</button>
+        </form>
+
+        <div class="admin-section">
+            <h3 style="font-size:1rem;">読者からのリクエスト一覧</h3>
+            <ul id="adminRequestList" class="request-list"></ul>
+        </div>
+
+        <div class="admin-section">
+            <h3 style="font-size:1rem;">データのバックアップ</h3>
+            <div class="backup-controls">
+                <button class="btn-backup" onclick="exportData()">データを保存する (エクスポート)</button>
+                <input type="file" id="importFile" style="display:none;" accept=".json" onchange="importData(event)">
+                <button class="btn-backup" onclick="document.getElementById('importFile').click()">データを復元する (インポート)</button>
+            </div>
+        </div>
+
+        <button onclick="logout()" style="margin-top:2rem; background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:0.8rem;">ログアウト</button>
+    </section>
+
+    <div id="loginArea"><span class="login-link" onclick="togglePasswordBox()">管理者ログイン</span><div id="passwordBox"><input type="password" id="adminPass" placeholder="Password"><button onclick="checkPassword()" style="padding:0.4rem 1rem; cursor:pointer;">ログイン</button></div></div>
+</main>
+<footer><div class="container">免責事項:当サイトの情報は一般的な解説を目的としており、個別の開発環境における動作やエラーの解決を完全に保証するものではありません。</div></footer>
+
+<script>
+    // 1. 保存用キーをGit用に変更（他のAIサイトのデータと混ざるのを防ぐため）
+         const STORAGE_KEY = 'git_glossary_v1';
+         const THEME_KEY = 'git_glossary_theme';
+         const REQUEST_KEY = 'git_requests_v1';
+         const FAVORITE_KEY = 'git_favorites_v1';
+         const READ_KEY = 'git_read_status_v1';
+    
+    // 2. 端末内（ローカル環境）でのテスト用に一時変更
+         const SITE_URL = window.location.origin;
+
+    const DEFAULT_DATA = [
+{ id: 1, term: "リポジトリ (Repository)", summary: "開発データと変更履歴をまるごと保存する「倉庫」", category: "basic", usage: "アプリのすべてのファイルと、過去から現在までの成長記録が詰まった特別なフォルダです。これを作っておくことで、いつでも過去の状態にタイムトラベルできるようになり、ファイルを誤って削除しても1秒で復元できます。", caution: "PC内の大切な「ドキュメント」フォルダの直下などで作成コマンドを打つと、PC内の全ファイルが監視対象になり動作が激重になります。必ず「今から作るアプリ専用のフォルダ」を新規作成し、その中で git init を実行してください。" },
+{ id: 2, term: "コミット (Commit)", summary: "いつでもやり直せる「ゲームのセーブデータ作成」", category: "command", usage: "「ログイン機能が完成した」「バグを直した」という区切りで、現在の状態に名前をつけて保存する操作です。これをしておけば、この先どれだけコードが壊れても、このセーブ地点からノーリスクでやり直せます。", caution: "何万行もコードを書いてから1回だけセーブするような「巨大すぎるコミット」は、不具合時に原因特定ができず意味をなしません。git commit -m \"fix: ログインのバグ修正\" のように、1つの機能追加や修正ごとにこまめにセーブデータを残してください。" },
+{ id: 3, term: "ステージング (Staging / git add)", summary: "セーブするファイルを乗せる「撮影前のひな壇」", category: "command", usage: "変更したたくさんのファイルの中から、次のセーブデータ（コミット）に含めたいものだけを選ぶ作業です。一時保存したいファイルだけをこの「ひな壇」に乗せることで、作業途中の関係ないファイルをセーブから除外できます。", caution: "git add . を使うと、公開してはいけないパスワード付きのファイルまで一気にひな壇に乗ってしまいます。git status を打って今どのファイルが変更されているかを確認し、不要なファイルが含まれている場合は git reset でひな壇から降ろしてください。" },
+{ id: 4, term: "ブランチ (Branch)", summary: "本番コードを汚さずに実験できる「パラレルワールド」", category: "basic", usage: "現在動いている安全なアプリ（main）から、歴史の枝分かれを作って新しい機能を開発する仕組みです。このパラレルワールドでどれだけ実験的なコードを書いてエラーを出しても、本番環境のアプリには1ミリも影響しません。", caution: "自分が今どの世界（ブランチ）にいるかを忘れて作業すると、本番コードにバグが直撃します。必ず作業前に git branch または git status を実行し、現在地が実験用ブランチになっていることを確認してからコードを書き始めてください。" },
+{ id: 5, term: "マージ (Merge)", summary: "実験室で成功した新機能を「本番アプリに合流」", category: "command", usage: "実験用ブランチで無事に完成した新機能を、本番用のメインブランチに安全に取り込む操作です。これにより、本番アプリの安定性を保ったまま、新しい機能を確実にアップデートしていくことができます。", caution: "合流先を間違えて、古い実験コードで新しいコードを上書きしてしまうミスが多発します。必ず取り込みたい側の本番ブランチ（main）に git checkout main で移動してから、git merge 実験用ブランチ名 を実行してください。" },
+{ id: 6, term: "コンフリクト (Conflict)", summary: "同じファイルの同じ行が衝突した「歴史の矛盾」", category: "basic", usage: "過去の自分が作った別のブランチ同士で、同じファイルの同じ行を別々に書き換えて合流させようとしたときに発生する警告です。Gitが「どちらの変更を生き残らせるべきか」をあなたに判断させるために処理を一時停止してくれます。", caution: "画面に CONFLICT と出るとパニックになりがちですが、勝手にファイルが消えるわけではありません。コード内に <<<<<<< などの記号が挿入されるので、エディタで不要な行と記号を手動で削除し、再度 git add と git commit を行って歴史を確定させてください。" },
+{ id: 7, term: "クローン (Clone)", summary: "GitHubの倉庫を「自分のPCへ丸ごとコピー」", category: "command", usage: "ネット上（GitHub）にあるリポジトリを、自分のパソコンに丸ごとダウンロードして開発環境を再現する操作です。PCが壊れても、この操作ひとつで過去の履歴も含めたすべての開発データを一瞬で手元に復活させられます。", caution: "すでにGitで管理しているフォルダ（リポジトリ）の中で git clone を実行すると、入れ子構造になって履歴管理が崩壊します。必ず既存のGit管理下ではない、まっさらなフォルダに移動してからクローンを実行してください。" },
+{ id: 8, term: "プッシュ (Push)", summary: "PCのセーブデータを「ネット上の金庫に保管」", category: "command", usage: "自分のPC内にあるコミット（履歴）を、GitHub上のリモートリポジトリにアップロードして同期する操作です。これによりPCの故障によるデータ全損失のリスクがゼロになり、完璧なバックアップが作れます。", caution: "APIキーやパスワードなどの機密情報をコードに書いたままプッシュすると、GitHubを通じて全世界に一瞬で漏洩します。プッシュする前に必ず変更差分を確認するか、後述の .gitignore を使って対象ファイルをGitの監視から除外してください。" },
+{ id: 9, term: "プル (Pull)", summary: "GitHubの最新状態を「手元のPCにダウンロード」", category: "command", usage: "GitHub側にある最新のコードと履歴を引っ張ってきて、自分のPCのローカルリポジトリを最新状態に更新する操作です。外出先でノートPCで書いたコードを、帰宅後にデスクトップPCに反映させたいときなどに使います。", caution: "手元のPCでコードを書き換え途中のまま git pull を実行すると、手元の変更と衝突してエラーになります。必ず手元の変更をコミットするか、一時退避（スタッシュ）させてからプルを実行してください。" },
+{ id: 10, term: "スタッシュ (Stash)", summary: "作業中のコードを汚さずに隠す「一時作業机」", category: "command", usage: "機能開発の途中で「今すぐ別のバグを直さなきゃいけない」となったとき、書きかけのコードを消さずに一時的に脇へ退避させる機能です。中途半端な状態で無理にセーブ（コミット）する必要がなくなります。", caution: "退避させたことを忘れて新しいコードを書き進めると、後で机から戻すときに衝突します。git stash で避けた後は、用事が済み次第すぐに git stash pop を実行して、書きかけのコードを作業場に戻してください。" },
+{ id: 11, term: ".gitignore", summary: "秘密情報や不要なファイルを「無視するブラックリスト」", category: "setup", usage: "パスワード、APIキー、動作に必要な巨大ライブラリなど、「Gitに記録・公開したくないファイル」を指定する特別な設定ファイルです。ここにファイル名を書いておくだけで、Gitがそれを完全に存在しないものとして扱ってくれます。", caution: "すでに一度コミットしてGitの履歴に載ってしまったファイルは、後からこのファイルに名前を書いても無視されません。その場合は git rm --cached ファイル名 というコマンドを実行して、Gitの監視対象から一度完全に外す必要があります。" },
+{ id: 12, term: "HEAD", summary: "自分が今立っている歴史の現在地を示す「ピン」", category: "basic", usage: "数あるコミットやブランチの中で、「自分のPCが今まさに表示している、作業中のコードの状態」がどこなのかを示すポインタです。タイムトラベルやブランチ切り替えを行うと、このHEADのピンが自動で移動します。", caution: "過去のコミットを覗き見した際に detached HEAD という状態（ピンがどこにも属さず浮いている状態）になることがあります。この状態でコードを書いてコミットすると迷子になって消える危険があるため、必ず git checkout ブランチ名 で元の安全な世界に戻ってから作業してください。" },
+{ id: 13, term: "Git", summary: "コードの変更履歴を管理する分散型バージョン管理システム", category: "basic", usage: "ファイルの変更を記録し、複数人で安全に開発したり、過去の状態へ戻ったりするための基盤です。", caution: "Gitはサービス名ではなく、PC上でも動くバージョン管理ソフトです。GitHubと同じものだと混同しないようにしましょう。" },
+{ id: 14, term: "GitHub", summary: "Gitリポジトリをオンラインで共有・協働するサービス", category: "basic", usage: "コードを保管し、レビュー、課題管理、自動化、公開までを一か所で行えます。", caution: "公開リポジトリには秘密情報を置かないでください。公開範囲は作成時に必ず確認します。" },
+{ id: 15, term: "リモートリポジトリ", summary: "ネットワーク上に置かれた共有用のリポジトリ", category: "basic", usage: "GitHubなどに置いた共同作業用の履歴の保管場所です。", caution: "ローカルとリモートは自動同期されません。必要なタイミングでfetch、pull、pushを使います。" },
+{ id: 16, term: "ローカルリポジトリ", summary: "自分のPC上にあるGit管理下のリポジトリ", category: "basic", usage: "通信なしでも履歴確認やコミットができる、手元の開発拠点です。", caution: "ローカルでコミットしただけでは、GitHub側のバックアップにはなりません。" },
+{ id: 17, term: "git init", summary: "フォルダを新しいGitリポジトリとして初期化するコマンド", category: "command", usage: "個人開発を始めるフォルダで実行し、変更履歴の記録を開始します。", caution: "意図しない親フォルダで実行すると、大量のファイルを管理対象にしてしまいます。" },
+{ id: 18, term: "git status", summary: "現在のブランチと変更状態を確認するコマンド", category: "command", usage: "作業前後に実行して、変更済み・ステージ済み・未追跡のファイルを確認します。", caution: "表示を確認せずにgit add .やコミットを行うと、不要なファイルを含めることがあります。" },
+{ id: 19, term: "git log", summary: "コミット履歴を一覧表示するコマンド", category: "command", usage: "いつ、誰が、どのような変更を行ったかを調べ、原因調査や復旧に役立てます。", caution: "履歴が長いと読みにくいため、--onelineや--graphなどの表示オプションを活用します。" },
+{ id: 20, term: "git diff", summary: "コミット前後の変更差分を確認するコマンド", category: "command", usage: "コミット前に意図した変更だけが含まれているかをレビューします。", caution: "ステージ済みの差分はgit diff --stagedで確認します。通常のgit diffだけでは見落とします。" },
+{ id: 21, term: "git reset", summary: "コミットやステージングを取り消すコマンド", category: "command", usage: "誤ってステージしたファイルを外したり、ローカルの履歴を戻したりします。", caution: "--hardは未コミットの変更も削除するため、実行前に必要な変更を退避してください。" },
+{ id: 22, term: "git revert", summary: "打ち消し用の新しいコミットを作るコマンド", category: "command", usage: "共有済みの履歴を壊さずに、過去の変更だけを安全に取り消します。", caution: "resetと違い履歴を消しません。取り消したいコミットの範囲を確認してから実行します。" },
+{ id: 23, term: "git checkout", summary: "ブランチ切り替えや過去の状態確認に使うコマンド", category: "command", usage: "既存ブランチへ移動したり、特定コミットのファイルを確認したりします。", caution: "未コミット変更があると切り替えに失敗する場合があります。用途によってswitchやrestoreも使い分けます。" },
+{ id: 24, term: "git switch", summary: "ブランチの切り替えに特化したコマンド", category: "command", usage: "作業ブランチへの移動や、新しいブランチの作成を分かりやすく行います。", caution: "ファイル復元には使いません。ファイル操作はgit restoreを利用します。" },
+{ id: 25, term: "git restore", summary: "作業ツリーのファイル変更を復元するコマンド", category: "command", usage: "変更したファイルを直前の状態に戻したり、ステージから外したりします。", caution: "コミットしていない変更が消えることがあります。対象ファイルと差分を確認してから実行します。" },
+{ id: 26, term: "git fetch", summary: "リモートの最新履歴を取得するコマンド", category: "command", usage: "手元の作業を変更せずに、リモートの情報だけを更新して比較します。", caution: "fetchしただけでは現在のブランチに変更は反映されません。必要ならmergeやrebaseを行います。" },
+{ id: 27, term: "git remote", summary: "リモートリポジトリの接続先を管理するコマンド", category: "command", usage: "originなどの名前でGitHubのURLを登録・確認・変更します。", caution: "接続先を誤ると別プロジェクトへpushする危険があります。push前にURLを確認します。" },
+{ id: 28, term: "git tag", summary: "特定のコミットに名前を付けるコマンド", category: "command", usage: "v1.0.0のようなリリース目印を作り、安定版をすぐ参照できるようにします。", caution: "タグは通常のブランチのように自動で動きません。付けるコミットを慎重に選びます。" },
+{ id: 29, term: "git rebase", summary: "変更の起点を付け替えて履歴を整える操作", category: "command", usage: "作業ブランチを最新mainの上に載せ直し、レビューしやすい直線的な履歴にします。", caution: "共有済みブランチの履歴を書き換えると他人の作業と衝突します。個人作業で使うのが基本です。" },
+{ id: 30, term: "git cherry-pick", summary: "特定のコミットだけを別ブランチへ取り込む操作", category: "command", usage: "緊急修正など、全ブランチではなく必要な1件の変更だけを反映します。", caution: "同じ変更を複数回取り込むと重複やコンフリクトが起きるため、履歴を確認します。" },
+{ id: 31, term: "コミットの amend", summary: "直前のコミットを修正して作り直す操作", category: "command", usage: "コミットメッセージの修正や、入れ忘れたファイルの追加に使います。", caution: "すでに共有したコミットをamendすると履歴が変わるため、push済みの場合は慎重に扱います。" },
+{ id: 32, term: "プルリクエスト (Pull Request)", summary: "変更を本体へ取り込む前にレビューを依頼する仕組み", category: "basic", usage: "作業ブランチの変更内容を比較し、コメントや承認を受けてからmainへ統合します。", caution: "タイトルと説明が曖昧だとレビューが進みません。目的、変更点、確認方法を記載します。" },
+{ id: 33, term: "フォーク (Fork)", summary: "他人のリポジトリを自分のアカウントへ複製する機能", category: "basic", usage: "権限のないオープンソースへ変更を提案するとき、自分のコピーで作業します。", caution: "フォーク元と自分のリポジトリを取り違えないよう、push先のURLを確認します。" },
+{ id: 34, term: "Issue", summary: "課題や要望を記録して議論するチケット", category: "basic", usage: "バグ報告、機能提案、作業タスクを残し、担当者や進捗を管理します。", caution: "再現手順や期待結果がない報告は解決しにくいため、具体的な情報を添えます。" },
+{ id: 35, term: "GitHub Actions", summary: "GitHub上で処理を自動実行する機能", category: "setup", usage: "pushをきっかけにテスト、ビルド、デプロイなどを自動化します。", caution: "秘密情報はワークフローへ直書きせず、GitHub Secretsで管理します。" },
+{ id: 36, term: "ワークフロー (Workflow)", summary: "自動化する処理と実行条件を定義した一連の手順", category: "setup", usage: "テストや公開の手順をコード化し、誰が実行しても同じ結果になるようにします。", caution: "実行条件を広くしすぎると不要な実行が増えます。onの設定を確認します。" },
+{ id: 37, term: "YAML", summary: "GitHub Actionsの設定などに使われる構造化データ形式", category: "setup", usage: "インデントでジョブやステップの構造を表し、自動化の設定を記述します。", caution: "インデントが意味を持つため、タブを使わずスペース数を揃えます。" },
+{ id: 38, term: "CI/CD", summary: "変更のテストやリリースを継続的に自動化する考え方", category: "setup", usage: "小さな変更ごとに自動テストとデプロイを行い、品質と公開速度を高めます。", caution: "自動化すれば必ず安全になるわけではありません。テスト内容と失敗時の通知を整備します。" },
+{ id: 39, term: "GitHub Pages", summary: "リポジトリの内容をWebサイトとして公開する機能", category: "setup", usage: "静的な個人サイト、ドキュメント、ポートフォリオを手軽に公開できます。", caution: "公開リポジトリでは原則として内容が見られます。秘密情報を含めないでください。" },
+{ id: 40, term: "Gist", summary: "短いコードやメモを共有できるGitHubの機能", category: "basic", usage: "設定例や小さなスクリプトを手軽に保存し、URLで共有します。", caution: "Secret Gistも完全な非公開とは限りません。機密情報の保存場所にはしないでください。" },
+{ id: 41, term: "Organization", summary: "複数人や複数チームでリポジトリを管理する単位", category: "setup", usage: "会社やプロジェクト単位で権限、チーム、リポジトリをまとめて管理します。", caution: "個人アカウントと組織アカウントの権限範囲を確認し、不要な管理者権限を与えません。" },
+{ id: 42, term: "Collaborator", summary: "リポジトリで作業権限を与えられたメンバー", category: "setup", usage: "共同開発者へ、閲覧、Issue、pushなど必要な権限を設定します。", caution: "権限は最小限にし、プロジェクト終了後は不要なメンバーを見直します。" },
+{ id: 43, term: "README", summary: "プロジェクトの目的や使い方を説明する案内文書", category: "basic", usage: "概要、セットアップ手順、実行方法、ライセンスを最初に伝える入口として整備します。", caution: "実際の手順と古い説明がずれると利用者が困るため、変更時に更新します。" },
+{ id: 44, term: "ライセンス (License)", summary: "コードを他者が利用・改変できる条件を示す規約", category: "basic", usage: "MITなどのライセンスを明示し、利用者が許可範囲を判断できるようにします。", caution: "ライセンスを選ばずに公開すると、利用条件が不明確になります。依存ライブラリの条件も確認します。" },
+{ id: 45, term: "リリース (Release)", summary: "特定バージョンの成果物を利用者へ公開する機能", category: "basic", usage: "タグ、変更履歴、実行ファイルなどをまとめて、利用者が入手しやすくします。", caution: "リリースノートに破壊的変更や既知の問題を書かないと、利用者が更新で混乱します。" },
+{ id: 46, term: "セマンティックバージョニング", summary: "変更の影響度を番号で表すバージョン規則", category: "basic", usage: "MAJOR.MINOR.PATCHで、互換性破壊・機能追加・バグ修正を区別します。", caution: "番号だけを上げても互換性の説明にはなりません。実際の変更内容と整合させます。" },
+{ id: 47, term: "SSHキー", summary: "パスワードなしで安全にGitHubへ接続する鍵の組み合わせ", category: "setup", usage: "公開鍵をGitHubへ登録し、秘密鍵をPCで安全に保管して認証します。", caution: "秘密鍵は絶対に共有・公開せず、漏洩したらGitHubから公開鍵を削除して作り直します。" },
+{ id: 48, term: "Personal Access Token", summary: "GitHub APIやHTTPS接続で使う個人用アクセストークン", category: "setup", usage: "パスワードの代わりに、用途と期限を絞った認証情報として利用します。", caution: "トークンをコードやログへ書かず、漏洩時は即座に失効させます。" },
+{ id: 49, term: "Webhook", summary: "GitHubのイベントを外部サービスへ通知する仕組み", category: "setup", usage: "pushやIssue作成を合図に、チャット通知や外部デプロイを自動起動します。", caution: "受信側で署名を検証し、誰でも送れる偽のリクエストを処理しないようにします。" },
+{ id: 50, term: "CODEOWNERS", summary: "ファイルやフォルダごとのレビュー担当者を指定する設定", category: "setup", usage: "重要な領域のプルリクエストに、専門の担当者を自動でレビュアーとして割り当てます。", caution: "ファイルパスやブランチ設定を誤ると担当者が割り当てられません。実際のPRで動作を確認します。" },
+{ id: 51, term: "git bisect", summary: "不具合の原因となったコミットを二分探索するコマンド", category: "command", usage: "正常なコミットと不具合があるコミットの間を自動で絞り込み、原因の変更を効率よく特定します。", caution: "各段階で正しい結果をgoodまたはbadとして入力しないと、誤ったコミットにたどり着きます。" },
+{ id: 52, term: "git blame", summary: "各行を最後に変更したコミットと作者を調べるコマンド", category: "command", usage: "コードの背景や変更者を確認し、修正理由を履歴からたどるときに使います。", caution: "責任追及のためではなく、変更の文脈を調べるための機能として利用します。" },
+{ id: 53, term: "git clean", summary: "未追跡ファイルを削除するコマンド", category: "command", usage: "ビルド生成物など、Gitが管理していない不要ファイルを作業ツリーから整理します。", caution: "削除したファイルは簡単に戻せません。実行前にgit clean -nで対象を確認します。" },
+{ id: 54, term: "git gc", summary: "不要なGitオブジェクトを整理して容量を節約するコマンド", category: "command", usage: "長期間使ったリポジトリの不要データを整理し、保存容量や処理効率を改善します。", caution: "必要な履歴まで消す操作ではありませんが、特殊な復旧作業前に実行するのは避けます。" },
+{ id: 55, term: "git reflog", summary: "HEADやブランチ参照の移動履歴を確認する機能", category: "command", usage: "誤ったresetやブランチ削除の後に、以前のコミット位置を探して復旧します。", caution: "reflogは主にローカルに保存され、永久に残るとは限りません。早めに復旧します。" },
+{ id: 56, term: "git show", summary: "コミットやタグの内容を詳しく表示するコマンド", category: "command", usage: "特定コミットの差分、メッセージ、変更ファイルを確認してレビューや調査に使います。", caution: "比較対象を指定しないと直前コミットが表示されます。対象のハッシュを明示すると安全です。" },
+{ id: 57, term: "git mv", summary: "ファイルの移動や名前変更をGitに記録するコマンド", category: "command", usage: "ファイル名変更を履歴と一緒に扱い、変更前後の関係を追跡しやすくします。", caution: "大規模な移動と内容変更を同時に行うと差分が読みにくくなるため、分けてコミットします。" },
+{ id: 58, term: "git rm", summary: "ファイルを削除しGitの管理対象から外すコマンド", category: "command", usage: "不要なファイルを作業ツリーとインデックスから削除し、その変更を次のコミットに含めます。", caution: "必要なファイルを削除しないよう、実行前にパスとgit statusを確認します。" },
+{ id: 59, term: "git config", summary: "Gitの名前やメールなどの設定を管理するコマンド", category: "setup", usage: "コミット作者情報、既定ブランチ名、エディタなどを環境ごとに設定します。", caution: "global設定は全リポジトリに影響します。プロジェクト固有の設定との優先順位を確認します。" },
+{ id: 60, term: "git archive", summary: "リポジトリの特定時点をアーカイブとして出力するコマンド", category: "command", usage: "履歴情報を含めず、リリース用のソースコードだけをZIPなどで配布します。", caution: ".gitignoreで無視されたファイルは通常含まれません。配布物に必要なファイルを確認します。" },
+{ id: 61, term: "origin", summary: "クローン元のリモートに付けられる標準的な名前", category: "basic", usage: "git push origin mainのように、接続先をURLではなく分かりやすい名前で指定します。", caution: "originは特別なサーバー名ではありません。git remote -vで実際のURLを確認できます。" },
+{ id: 62, term: "upstream", summary: "フォーク元など上流リポジトリに付ける慣例的な名前", category: "basic", usage: "本家の変更をfetchして、自分のフォークを最新状態へ追従させます。", caution: "originとupstreamの向きを混同すると、意図しないリポジトリへpushする恐れがあります。" },
+{ id: 63, term: "追跡ブランチ", summary: "ローカルブランチと対応付けられたリモートブランチ", category: "basic", usage: "引数なしのpullやpushで、対応するリモートを自動的に使えるようにします。", caution: "対応先を誤ると別ブランチと同期します。git branch -vvで関係を確認します。" },
+{ id: 64, term: "Fast-forward", summary: "分岐がないとき参照先だけを先へ進めるマージ方式", category: "basic", usage: "余分なマージコミットを作らず、直線的な履歴として変更を取り込みます。", caution: "分岐がある場合はFast-forwardになりません。履歴方針に合うマージ方法を選びます。" },
+{ id: 65, term: "三方向マージ", summary: "共通祖先と両方の先端を比較して統合する方式", category: "basic", usage: "分岐した2つの変更と共通の出発点を比較し、マージコミットを作成します。", caution: "同じ箇所を別々に変更しているとコンフリクトになります。差分を確認して解決します。" },
+{ id: 66, term: "Squash merge", summary: "複数コミットを一つにまとめて取り込むマージ方式", category: "basic", usage: "作業中の細かなコミットを整理し、main側の履歴を読みやすく保ちます。", caution: "元ブランチの個別コミット情報がmainにそのまま残らないため、必要な背景はPRに記録します。" },
+{ id: 67, term: "マージコミット", summary: "複数の履歴を統合したことを示すコミット", category: "basic", usage: "分岐したブランチを統合した時点と、その両方の親コミットを履歴に残します。", caution: "不要なマージコミットが増えると履歴が複雑になります。運用ルールを決めておきます。" },
+{ id: 68, term: "コンフリクトマーカー", summary: "衝突した変更箇所を示す特殊な記号", category: "basic", usage: "<<<<<<<、=======、>>>>>>>の範囲を手がかりに、採用するコードを選んで解決します。", caution: "マーカーを残したままコミットするとコードが壊れます。検索して完全に除去します。" },
+{ id: 69, term: "detached HEAD", summary: "ブランチではなく特定コミットを直接参照している状態", category: "basic", usage: "過去の状態を確認したり、一時的な検証を行ったりするときに発生します。", caution: "この状態で作ったコミットはブランチから外れます。必要なら新しいブランチを作成します。" },
+{ id: 70, term: "浅いクローン", summary: "履歴の一部だけを取得するクローン方法", category: "command", usage: "--depthを指定して大きなリポジトリを短時間で取得し、ビルドやCIを高速化します。", caution: "古い履歴がないため、logやrebaseなど一部の操作が制限されることがあります。" },
+{ id: 71, term: "サブモジュール", summary: "別のGitリポジトリを子リポジトリとして組み込む仕組み", category: "basic", usage: "共通ライブラリなどを別リポジトリとして管理し、特定コミットを親プロジェクトから参照します。", caution: "clone後にgit submodule update --initが必要です。親と子の変更を別々にコミットします。" },
+{ id: 72, term: "モノレポ", summary: "複数のプロジェクトを一つのリポジトリで管理する構成", category: "basic", usage: "共通設定や依存関係をまとめ、複数アプリを横断した変更を一元管理します。", caution: "リポジトリが大きくなりやすいため、ディレクトリ構成とCIの実行範囲を設計します。" },
+{ id: 73, term: "ベアリポジトリ", summary: "作業ツリーを持たず履歴だけを保存するリポジトリ", category: "basic", usage: "サーバー上の共有リポジトリや、中央的な受け取り先として利用します。", caution: "通常の作業フォルダとして直接編集できません。必要ならcloneして作業します。" },
+{ id: 74, term: "git worktree", summary: "一つのリポジトリから複数の作業ツリーを作る機能", category: "command", usage: "ブランチごとに別フォルダを用意し、切り替えなしで複数作業を並行します。", caution: "同じブランチを複数のworktreeで同時にcheckoutすることはできません。" },
+{ id: 75, term: "Gitフック", summary: "特定のGit操作の前後に自動実行するスクリプト", category: "setup", usage: "コミット前の検査やpush前のテストを自動化し、ミスを早期に検出します。", caution: "フックは通常リポジトリに自動共有されません。チームで使う場合は導入方法を統一します。" },
+{ id: 76, term: "pre-commitフック", summary: "コミットを作成する直前に実行されるフック", category: "setup", usage: "フォーマット、Lint、秘密情報検査などをコミット前に実行します。", caution: "処理が重すぎると開発を妨げます。短時間の検査とCIで行う検査を分けます。" },
+{ id: 77, term: "コミットハッシュ", summary: "コミット内容を一意に識別する文字列", category: "basic", usage: "特定の変更を参照したり、レビューや障害調査で対象コミットを指定したりします。", caution: "短縮ハッシュは状況によって一意でなくなるため、重要な記録では完全なハッシュを使います。" },
+{ id: 78, term: "SHA-1", summary: "Gitのオブジェクト識別に使われてきたハッシュアルゴリズム", category: "basic", usage: "コミットやファイルの内容から識別値を作り、履歴の参照に利用します。", caution: "新しい環境ではSHA-256対応などの仕様もあります。ハッシュ値を秘密情報とは考えません。" },
+{ id: 79, term: "ワーキングツリー", summary: "現在PC上で編集しているファイルの状態", category: "basic", usage: "ファイルを編集し、差分を確認してからインデックスへ登録します。", caution: "ワーキングツリーの変更はまだ履歴ではありません。必要な変更をコミットします。" },
+{ id: 80, term: "インデックス", summary: "次のコミット内容を一時的に組み立てる領域", category: "basic", usage: "変更したファイルの一部だけを選び、次のコミット単位を細かく設計します。", caution: "作業ツリーとコミット済み状態の中間です。git diff --stagedで内容を確認します。" },
+{ id: 81, term: "git pull --rebase", summary: "取得した変更の上に自分のコミットを積み直すpull方法", category: "command", usage: "不要なマージコミットを減らし、直線的な履歴でリモートの変更を取り込みます。", caution: "自分のコミットが書き換えられるため、共有済みブランチでは運用ルールを確認します。" },
+{ id: 82, term: "強制プッシュ", summary: "リモートの履歴を上書きするpush操作", category: "command", usage: "個人ブランチのrebase後など、意図的にリモート参照を更新するときに使います。", caution: "他人のコミットを消す危険があります。通常は--force-with-leaseを使い、共有ブランチでは避けます。" },
+{ id: 83, term: "保護ブランチ", summary: "直接pushや無承認マージを制限したブランチ", category: "setup", usage: "mainなどにレビュー、ステータスチェック、署名などの必須条件を設定します。", caution: "管理者による例外設定が残っていないか、ルールの適用範囲を確認します。" },
+{ id: 84, term: "ドラフトプルリクエスト", summary: "まだ完成前であることを示すレビュー準備中のPR", category: "basic", usage: "早い段階で方向性の相談や暫定レビューを受け、完成後に通常のPRへ切り替えます。", caution: "完成していないことを明示し、マージ可能な状態と誤解されないようにします。" },
+{ id: 85, term: "コードレビュー", summary: "変更内容を他の開発者が確認する工程", category: "basic", usage: "バグ、設計、可読性、テスト不足を早期に見つけ、知識をチームで共有します。", caution: "人だけに頼らず、自動テストやLintと組み合わせて確認漏れを減らします。" },
+{ id: 86, term: "レビュー承認", summary: "レビュアーが変更を取り込んでよいと判断する操作", category: "basic", usage: "必要な担当者の承認をそろえ、保護ブランチへのマージ条件を満たします。", caution: "承認後に大きな変更を追加した場合は、再レビューが必要になることがあります。" },
+{ id: 87, term: "必須ステータスチェック", summary: "マージ前に成功を必須とする自動チェック", category: "setup", usage: "テストやビルドが成功したPRだけをmainへ取り込めるようにします。", caution: "チェック名の変更やワークフロー停止でマージ不能にならないよう、設定を定期的に見直します。" },
+{ id: 88, term: "Dependabot", summary: "依存パッケージの更新を提案するGitHub機能", category: "setup", usage: "脆弱性修正やバージョン更新のプルリクエストを自動作成します。", caution: "自動PRを無条件にマージせず、テスト結果と変更内容を確認します。" },
+{ id: 89, term: "セキュリティアドバイザリ", summary: "プロジェクトの脆弱性を報告・管理する仕組み", category: "setup", usage: "影響範囲、修正版、回避策を整理し、利用者へ安全な更新を案内します。", caution: "公開前の脆弱性情報には機密性があります。権限と公開タイミングを管理します。" },
+{ id: 90, term: "Secret scanning", summary: "リポジトリ内の漏洩した秘密情報を検出する機能", category: "setup", usage: "APIキーやトークンらしき文字列を検出し、漏洩時の対応を促します。", caution: "検出は漏洩を無効化しません。見つけた認証情報は直ちに失効・再発行します。" },
+{ id: 91, term: "Code scanning", summary: "コードの脆弱性や品質問題を自動分析する機能", category: "setup", usage: "静的解析をActionsなどで実行し、問題をIssueやSecurity画面で追跡します。", caution: "誤検知や検出漏れがあります。重要な指摘は内容を確認し、必要なら手動検証します。" },
+{ id: 92, term: "GitHub Discussions", summary: "質問やアイデアを会話形式で共有する機能", category: "basic", usage: "Issueにする前の相談やコミュニティとのQ&Aを、課題管理と分けて行います。", caution: "具体的なバグはDiscussionsだけで終わらせず、必要に応じてIssueへ整理します。" },
+{ id: 93, term: "マイルストーン", summary: "複数のIssueやPRをまとめる目標・期限の単位", category: "basic", usage: "次回リリースやスプリントに必要な作業をまとめ、進捗を確認します。", caution: "期限だけを置かず、完了条件と対象Issueを明確にします。" },
+{ id: 94, term: "GitHub Projects", summary: "IssueやPRを表・ボード形式で管理する機能", category: "basic", usage: "タスクの状態、担当、優先度を可視化し、開発計画をチームで共有します。", caution: "Projects上の状態とIssueの実際の状態がずれないよう、運用ルールを決めます。" },
+{ id: 95, term: "ラベル", summary: "IssueやPRを分類する色付きのタグ", category: "basic", usage: "bug、enhancement、緊急度などを付け、検索や優先順位付けをしやすくします。", caution: "似たラベルを増やしすぎると分類が機能しません。意味と命名を統一します。" },
+{ id: 96, term: "GitHub Environments", summary: "デプロイ先ごとの保護や環境変数を管理する機能", category: "setup", usage: "本番デプロイに承認や待機時間を設定し、環境ごとのSecretsを分離します。", caution: "環境名とワークフローの指定が一致しないと保護ルールが適用されません。" },
+{ id: 97, term: "Actionsアーティファクト", summary: "ワークフロー実行で生成したファイルを保存する機能", category: "setup", usage: "テスト結果、ビルド成果物、ログなどを実行後にダウンロードできるようにします。", caution: "保存期間や容量に制限があります。機密情報を含む成果物を不用意に公開しません。" },
+{ id: 98, term: "GitHub Actions Runner", summary: "Actionsのジョブを実行する環境", category: "setup", usage: "GitHubホストランナーや自前のセルフホストランナーでテストやビルドを実行します。", caution: "セルフホストではジョブから機密環境へ到達できるため、実行者と権限を制限します。" },
+{ id: 99, term: "マトリックス戦略", summary: "複数のOSやバージョンを組み合わせてジョブを実行する設定", category: "setup", usage: "Node.jsやPythonの複数バージョンを一つのワークフローで網羅的にテストします。", caution: "組み合わせを増やしすぎると実行時間と料金が増えるため、対象を絞ります。" },
+{ id: 100, term: "GitHub CLI", summary: "ターミナルからGitHubを操作する公式コマンドラインツール", category: "command", usage: "ghコマンドでIssue、PR、リポジトリ、Actionsの状況をブラウザを開かずに操作します。", caution: "ログイン状態や権限を確認し、共有端末ではトークンやコマンド履歴を適切に管理します。" }
+];
+
+    let glossaryData = [];
+    let requestData = [];
+    let favoriteIds = [];
+    let readIds = [];
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    function normalizeText(str) {
+        if (!str) return '';
+        return str.toLowerCase().replace(/[\u30a1-\u30f6]/g, (match) => String.fromCharCode(match.charCodeAt(0) - 0x60));
+    }
+
+    function toggleTheme() {
+        const isLight = document.body.classList.toggle('light-mode');
+        document.getElementById('themeToggle').innerText = isLight ? '☀️' : '🌙';
+        localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
+    }
+
+    function updateSEO() {
+        let script = document.getElementById('seo-json-ld');
+        if (!script) {
+            script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.id = 'seo-json-ld';
+            document.head.appendChild(script);
+        }
+        const faqData = {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": glossaryData.map(item => ({
+                "@type": "Question",
+                "name": item.term,
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": `【概要】${item.summary} 【個人開発活用法】${item.usage} 【落とし穴・エラー対策】${item.caution}`
+                }
+            }))
+        };
+        script.text = JSON.stringify(faqData);
+    }
+
+    function renderProgress() {
+        const total = glossaryData.length;
+        const readCount = readIds.length;
+        const percent = total > 0 ? Math.round((readCount / total) * 100) : 0;
+        
+        document.getElementById('progressText').innerText = `現在のGit & GitHub理解度: ${percent}% (全${total}語中 ${readCount}語クリア)`;
+        document.getElementById('progressBarFill').style.width = `${percent}%`;
+
+        // Progress Messages
+        let msg = "";
+        if (percent === 0) {
+            msg = "まずは1つ、用語をチェックしてみましょう！";
+        } else if (percent <= 30) {
+            msg = "基礎概念をインプット中！この調子で進みましょう。";
+        } else if (percent <= 60) {
+            msg = "Gitの全体像が見えてきましたね！個人開発で使ってみましょう。";
+        } else if (percent < 100) {
+            msg = "かなりのGit使いです！エラーが起きてももう怖くありません。";
+        } else {
+            msg = "コンプリート！これであなたもGitマスターです！";
+        }
+        document.getElementById('progressMessage').innerText = msg;
+    }
+
+    window.shareProgressOnX = () => {
+        const total = glossaryData.length;
+        const readCount = readIds.length;
+        const percent = total > 0 ? Math.round((readCount / total) * 100) : 0;
+        const text = `私のGit & GitHub理解度は【 ${percent} % 】に到達！\n全${total}語中、${readCount}語の重要用語をマスターしました。\n個人開発に役立つ用語集で知識をコンプリートしよう ➔ ${"https://Git-c.vercel.app/"}`;
+        const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+        window.open(url, '_blank');
+    };
+
+    function renderDailyPick() {
+        const section = document.getElementById('dailyPickSection');
+        const content = document.getElementById('dailyPickContent');
+        if (glossaryData.length === 0) { section.style.display = 'none'; return; }
+        const now = new Date();
+        const seed = now.getFullYear() * 1000 + (now.getMonth() + 1) * 100 + now.getDate();
+        const index = seed % glossaryData.length;
+        const item = glossaryData[index];
+        section.style.display = 'block';
+        content.innerHTML = `
+            <div class="daily-pick-title">${item.term}</div>
+            <div class="daily-pick-summary">${item.summary}</div>
+            <button class="share-x-btn" onclick="shareOnX(${item.id})">𝕏 にシェアして勉強仲間へ共有</button>
+        `;
+    }
+
+    window.shareOnX = (id) => {
+        const item = glossaryData.find(i => i.id === id);
+        if (!item) return;
+        const text = `#今日のAI用語：${item.term} を5秒で理解した！\n「${item.summary}」\n個人開発者向けのGit用語集サイトはこちら ➔ ${"https://ai-glossary-a.vercel.app/"}`;
+        const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+        window.open(url, '_blank');
+    };
+
+    function init() {
+        if (localStorage.getItem(THEME_KEY) === 'light') { document.body.classList.add('light-mode'); document.getElementById('themeToggle').innerText = '☀️'; }
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved && JSON.parse(saved).length > 0) { glossaryData = JSON.parse(saved); } else { glossaryData = [...DEFAULT_DATA]; saveData(); }
+        const savedReq = localStorage.getItem(REQUEST_KEY);
+        if (savedReq) { requestData = JSON.parse(savedReq); }
+        const savedFav = localStorage.getItem(FAVORITE_KEY);
+        if (savedFav) { favoriteIds = JSON.parse(savedFav); }
+        const savedRead = localStorage.getItem(READ_KEY);
+        if (savedRead) { readIds = JSON.parse(savedRead); }
+        
+        render();
+        renderRequests();
+        renderDailyPick();
+        renderProgress();
+        updateSEO();
+    }
+
+    function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(glossaryData)); }
+    function saveRequests() { localStorage.setItem(REQUEST_KEY, JSON.stringify(requestData)); }
+    function saveFavorites() { localStorage.setItem(FAVORITE_KEY, JSON.stringify(favoriteIds)); }
+    function saveReadStatus() { localStorage.setItem(READ_KEY, JSON.stringify(readIds)); }
+
+    function renderCard(item, isFavList = false) {
+        const isFavorited = favoriteIds.includes(item.id);
+        const isRead = readIds.includes(item.id);
+        const uniqueId = isFavList ? `fav-${item.id}` : `main-${item.id}`;
+        return `
+            <div class="card ${isRead ? 'read' : ''}" id="card-${uniqueId}">
+                <div class="admin-controls admin-only">
+                    <button class="btn-mini btn-edit" onclick="startEdit(${item.id})">編集</button>
+                    <button class="btn-mini btn-delete" onclick="deleteTerm(${item.id})">削除</button>
+                </div>
+                <div class="card-header" onclick="toggleCard('${uniqueId}')">
+                    <div class="card-title-box">
+                        <div class="card-title-row">
+                            <h3>${isRead ? '✅ ' : ''}${item.term}</h3>
+                            <div class="card-actions">
+                                <button class="read-btn ${isRead ? 'active' : ''}" onclick="toggleRead(event, ${item.id})" title="読了チェック">
+                                    ${isRead ? '✅' : '✔'}
+                                </button>
+                                <button class="fav-btn ${isFavorited ? 'active' : ''}" onclick="toggleFavorite(event, ${item.id})" title="お気に入り">
+                                    ${isFavorited ? '★' : '☆'}
+                                </button>
+                            </div>
+                        </div>
+                        <p class="card-summary">${item.summary}</p>
+                        <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                            <span class="category-tag">${item.category}</span>
+                            <button class="copy-btn" onclick="copySummary(event, ${item.id})">📋 要約をコピー</button>
+                        </div>
+                    </div>
+                    <div class="arrow">▼</div>
+                </div>
+                <div class="card-content">
+                    <div class="content-inner">
+                        <div class="content-section"><span class="label">💡 個人開発での活用法</span><p>${item.usage.replace(/\n/g, '<br>')}</p></div>
+                        <div class="content-section"><span class="label">⚠️ 初心者の落とし穴・エラー対策</span><p>${item.caution.replace(/\n/g, '<br>')}</p></div>
+                        ${item.imageUrl ? `<div class="media-box"><img src="${item.imageUrl}" alt="${item.term}"></div>` : ''}
+                        ${item.youtube ? `<div class="media-box"><div class="video-container">${item.youtube}</div></div>` : ''}
+                        ${item.link ? `<a href="${item.link}" target="_blank" class="link-btn">🌐 詳しく見る</a>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function render() {
+        const favList = document.getElementById('favoritesList');
+        const favorites = glossaryData.filter(item => favoriteIds.includes(item.id));
+        if (favorites.length > 0) { favList.innerHTML = favorites.map(item => renderCard(item, true)).join(''); } else { favList.innerHTML = '<div class="fav-empty-msg">お気に入りの用語はまだありません。<br>☆マークを押して自分専用の辞書を作りましょう。</div>'; }
+        const list = document.getElementById('glossaryList');
+        const nQuery = normalizeText(searchQuery);
+        const filtered = glossaryData.filter(item => {
+            const mCat = currentCategory === 'all' || item.category === currentCategory;
+            const nTerm = normalizeText(item.term);
+            const nSummary = normalizeText(item.summary);
+            return mCat && (nTerm.includes(nQuery) || nSummary.includes(nQuery));
+        });
+        if (filtered.length === 0) { list.innerHTML = '<div class="empty-msg">該当する用語が見つかりませんでした。</div>'; } else { list.innerHTML = filtered.map(item => renderCard(item, false)).join(''); }
+        updateSEO();
+        renderDailyPick();
+        renderProgress();
+    }
+
+    window.toggleFavorite = (event, id) => { event.stopPropagation(); const index = favoriteIds.indexOf(id); if (index > -1) { favoriteIds.splice(index, 1); } else { favoriteIds.push(id); } saveFavorites(); render(); };
+    
+    window.toggleRead = (event, id) => {
+        event.stopPropagation();
+        const index = readIds.indexOf(id);
+        if (index > -1) {
+            readIds.splice(index, 1);
+        } else {
+            readIds.push(id);
+        }
+        saveReadStatus();
+        render();
+    };
+
+    window.toggleCard = (uniqueId) => document.getElementById(`card-${uniqueId}`).classList.toggle('open');
+    window.submitRequest = () => { const input = document.getElementById('readerRequestInput'); const val = input.value.trim(); if (!val) return; requestData.push(val); saveRequests(); input.value = ''; alert('リクエストを送信しました！'); if (document.body.classList.contains('is-admin')) renderRequests(); };
+    function renderRequests() { const list = document.getElementById('adminRequestList'); if (!list) return; if (requestData.length === 0) { list.innerHTML = '<li style="font-size:0.8rem; color:var(--text-muted);">現在リクエストはありません</li>'; return; } list.innerHTML = requestData.map((req, idx) => `<li class="request-item"><span>${req}</span><button class="btn-mini btn-delete" onclick="deleteRequest(${idx})">削除</button></li>`).join(''); }
+    window.deleteRequest = (idx) => { requestData.splice(idx, 1); saveRequests(); renderRequests(); };
+    
+    window.exportData = () => {
+        const backup = { 
+            glossary: glossaryData, 
+            requests: requestData, 
+            favorites: favoriteIds, 
+            readStatus: readIds,
+            timestamp: new Date().toISOString() 
+        };
+        const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `ai_glossary_backup_${new Date().getTime()}.json`; a.click();
+        URL.revokeObjectURL(url);
+    };
+
+    window.importData = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const imported = JSON.parse(e.target.result);
+                if (imported.glossary && Array.isArray(imported.glossary)) {
+                    glossaryData = imported.glossary;
+                    requestData = imported.requests || [];
+                    favoriteIds = imported.favorites || [];
+                    readIds = imported.readStatus || [];
+                    saveData(); saveRequests(); saveFavorites(); saveReadStatus(); render(); renderRequests();
+                    alert('データを正常に復元しました！');
+                } else { alert('無効なバックアップファイルです。'); }
+            } catch (err) { alert('ファイルの読み込みに失敗しました。'); }
+        };
+        reader.readAsText(file);
+        event.target.value = '';
+    };
+
+    window.copySummary = async (event, id) => { event.stopPropagation(); const item = glossaryData.find(i => i.id === id); if (!item) return; const textToCopy = `【用語名】${item.term}\n【概要】${item.summary}\n（詳細・他の用語はこちら ➔ ${SITE_URL} ）`; const btn = event.currentTarget; const originalText = btn.innerHTML; try { await navigator.clipboard.writeText(textToCopy); btn.innerHTML = '✅ コピーしました'; setTimeout(() => { btn.innerHTML = originalText; }, 2000); } catch (err) { alert('コピー失敗'); } };
+    window.togglePasswordBox = () => { const box = document.getElementById('passwordBox'); const currentDisplay = window.getComputedStyle(box).display; if (currentDisplay === 'none') {  box.style.display = 'block'; } else { box.style.display = 'none';} } ;
+    window.checkPassword = () => { if (document.getElementById('adminPass').value === 'admin123') { document.body.classList.add('is-admin'); document.getElementById('loginArea').style.display = 'none'; render(); renderRequests(); } else { alert('パスワード不一致'); } };
+    window.logout = () => { document.body.classList.remove('is-admin'); document.getElementById('loginArea').style.display = 'block'; document.getElementById('passwordBox').style.display = 'none'; document.getElementById('adminPass').value = ''; resetForm(); render(); };
+    window.startEdit = (id) => { const item = glossaryData.find(i => i.id === id); if (!item) return; document.getElementById('editId').value = item.id; document.getElementById('termName').value = item.term; document.getElementById('termSummary').value = item.summary; document.getElementById('termCategory').value = item.category; document.getElementById('termUsage').value = item.usage; document.getElementById('termCaution').value = item.caution; document.getElementById('termLink').value = item.link || ''; document.getElementById('termImageUrl').value = item.imageUrl || ''; document.getElementById('termYoutube').value = item.youtube || ''; document.getElementById('submitBtn').innerText = '更新する'; document.getElementById('cancelEdit').style.display = 'block'; window.scrollTo({ top: document.getElementById('adminPanel').offsetTop, behavior: 'smooth' }); };
+    function resetForm() { document.getElementById('termForm').reset(); document.getElementById('editId').value = ''; document.getElementById('submitBtn').innerText = '追加する'; document.getElementById('cancelEdit').style.display = 'none'; }
+    document.getElementById('cancelEdit').addEventListener('click', resetForm);
+    document.getElementById('termForm').addEventListener('submit', (e) => { e.preventDefault(); const id = document.getElementById('editId').value; const termData = { term: document.getElementById('termName').value, summary: document.getElementById('termSummary').value, category: document.getElementById('termCategory').value, usage: document.getElementById('termUsage').value, caution: document.getElementById('termCaution').value, link: document.getElementById('termLink').value, imageUrl: document.getElementById('termImageUrl').value, youtube: document.getElementById('termYoutube').value }; if (id) { const idx = glossaryData.findIndex(i => i.id == id); glossaryData[idx] = { ...termData, id: parseInt(id) }; alert('更新しました'); } else { const newId = glossaryData.length > 0 ? Math.max(...glossaryData.map(i => i.id)) + 1 : Date.now(); glossaryData.push({ ...termData, id: newId }); alert('追加しました'); } saveData(); render(); resetForm(); });
+    
+    window.deleteTerm = (id) => { 
+        if (confirm('削除しますか？')) { 
+            glossaryData = glossaryData.filter(i => i.id !== id); 
+            favoriteIds = favoriteIds.filter(fid => fid !== id);
+            readIds = readIds.filter(rid => rid !== id);
+            saveData(); saveFavorites(); saveReadStatus(); render(); 
+        } 
+    };
+
+    document.getElementById('searchInput').addEventListener('input', (e) => { searchQuery = e.target.value; render(); });
+    document.getElementById('tabs').addEventListener('click', (e) => { if (e.target.classList.contains('tab-btn')) { document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); e.target.classList.add('active'); currentCategory = e.target.dataset.category; render(); } });
+    init();
+</script>
+</body>
+</html>
